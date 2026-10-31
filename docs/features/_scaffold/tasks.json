@@ -1,0 +1,51 @@
+{
+  "slug": "_scaffold",
+  "source": "docs/architecture-map.md (mode: greenfield-bootstrap)",
+  "tasks": [
+    {
+      "id": "S1",
+      "title": "Create the package structure, pyproject.toml and FastAPI entry point with a placeholder home page",
+      "layer": "scaffold",
+      "deps": [],
+      "acs": [],
+      "dod": "pip install -e '.[dev]' succeeds in a fresh .venv; `uvicorn app.main:app` boots on 127.0.0.1 and GET / returns 200 rendered from base.html",
+      "files_hint": ["pyproject.toml", "app/__init__.py", "app/main.py", "app/web/", "app/web/templates/base.html", "app/web/templates/_macros.html", "app/web/static/app.css", "app/domain/__init__.py", "app/domain/errors.py", "app/db/__init__.py", ".gitignore"]
+    },
+    {
+      "id": "S2",
+      "title": "Wire the pytest harness with unit/integration folders and an app-boots smoke test",
+      "layer": "scaffold",
+      "deps": ["S1"],
+      "acs": [],
+      "dod": "`pytest` runs green: an integration smoke test asserts GET / returns 200 via TestClient; tests/unit and tests/integration exist",
+      "files_hint": ["tests/conftest.py", "tests/unit/", "tests/integration/test_smoke.py"]
+    },
+    {
+      "id": "S3",
+      "title": "Set up SQLAlchemy session, SQLite path config and Alembic with an initial empty revision",
+      "layer": "scaffold",
+      "deps": ["S1"],
+      "acs": [],
+      "dod": "`alembic upgrade head` then `alembic downgrade base` both succeed against a temp SQLite file (TRACKER_DB_PATH); get_session dependency is importable; the test fixture migrates a temp DB to head",
+      "files_hint": ["app/db/session.py", "app/db/models.py", "alembic.ini", "migrations/env.py", "migrations/versions/"]
+    },
+    {
+      "id": "S4",
+      "title": "Add the GitHub Actions CI workflow running ruff and pytest",
+      "layer": "scaffold",
+      "deps": ["S2", "S3"],
+      "acs": [],
+      "dod": "workflow YAML is valid; it runs `ruff check .` and `pytest` on Python 3.12; both commands pass locally",
+      "files_hint": [".github/workflows/ci.yml"]
+    },
+    {
+      "id": "S5",
+      "title": "Write CLAUDE.md from the foundation conventions",
+      "layer": "scaffold",
+      "deps": ["S1"],
+      "acs": [],
+      "dod": "CLAUDE.md lists run/test/lint/migrate commands and the conventions from docs/architecture-map.md (layers, money in cents, errors, tests)",
+      "files_hint": ["CLAUDE.md"]
+    }
+  ]
+}
